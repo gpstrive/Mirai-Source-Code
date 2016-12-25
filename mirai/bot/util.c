@@ -20,6 +20,9 @@
 
 int util_strlen(char *str)
 {
+    if (str == NULL) {
+        return 0;
+    }
     int c = 0;
 
     while (*str++ != 0)
@@ -62,6 +65,9 @@ BOOL util_strcmp(char *str1, char *str2)
 
 int util_strcpy(char *dst, char *src)
 {
+    if (src == NULL) {
+        return 0;
+    }
     int l = util_strlen(src);
 
     util_memcpy(dst, src, l + 1);

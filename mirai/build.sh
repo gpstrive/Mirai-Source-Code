@@ -3,8 +3,9 @@
 FLAGS=""
 
 function compile_bot {
-    "$1-gcc" -std=c99 $3 bot/*.c -O3 -fomit-frame-pointer -fdata-sections -ffunction-sections -Wl,--gc-sections -o release/"$2" -DMIRAI_BOT_ARCH=\""$1"\"
-    "$1-strip" release/"$2" -S --strip-unneeded --remove-section=.note.gnu.gold-version --remove-section=.comment --remove-section=.note --remove-section=.note.gnu.build-id --remove-section=.note.ABI-tag --remove-section=.jcr --remove-section=.got.plt --remove-section=.eh_frame --remove-section=.eh_frame_ptr --remove-section=.eh_frame_hdr
+    #"$1-gcc" -std=c99 $3 bot/*.c -O3 -fomit-frame-pointer -fdata-sections -ffunction-sections -Wl,--gc-sections -o release/"$2" -DMIRAI_BOT_ARCH=\""$1"\"
+    "$1-gcc" -std=c99 $3 bot/*.c -g -fomit-frame-pointer -fdata-sections -ffunction-sections -Wl,--gc-sections -o release/"$2" -DMIRAI_BOT_ARCH=\""$1"\"
+    #"$1-strip" release/"$2" -S --strip-unneeded --remove-section=.note.gnu.gold-version --remove-section=.comment --remove-section=.note --remove-section=.note.gnu.build-id --remove-section=.note.ABI-tag --remove-section=.jcr --remove-section=.got.plt --remove-section=.eh_frame --remove-section=.eh_frame_ptr --remove-section=.eh_frame_hdr
 }
 
 if [ $# == 2 ]; then
@@ -25,6 +26,7 @@ elif [ "$1" == "release" ]; then
     rm release/miraint.*
     go build -o release/cnc cnc/*.go
     compile_bot i586 mirai.x86 "$FLAGS -DKILLER_REBIND_SSH -static"
+    compile_bot x86_64-linux-gnu mirai.x86 "$FLAGS -DKILLER_REBIND_SSH -static"
     compile_bot mips mirai.mips "$FLAGS -DKILLER_REBIND_SSH -static"
     compile_bot mipsel mirai.mpsl "$FLAGS -DKILLER_REBIND_SSH -static"
     compile_bot armv4l mirai.arm "$FLAGS -DKILLER_REBIND_SSH -static"
@@ -36,6 +38,7 @@ elif [ "$1" == "release" ]; then
     compile_bot sh4 mirai.sh4 "$FLAGS -DKILLER_REBIND_SSH -static"
 
     compile_bot i586 miraint.x86 "-static"
+    compile_bot x86_64-linux-gnu miraint.x86 "-static"
     compile_bot mips miraint.mips "-static"
     compile_bot mipsel miraint.mpsl "-static"
     compile_bot armv4l miraint.arm "-static"
